@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <main class="w-full h-96 flex justify-center">
+
+            <div class="mt-24">
+                <p class="text-3xl font-semibold">Este es mi contador: {{ count }}</p>
+
+                <div class="flex gap-3 my-2 text-xl">
+                    <div class="flex flex-col gap-2">
+                        <button @click="count++" class="bg-green-500 text-white font-bold py-2 px-4 rounded shadow">
+                            Sumar
+                        </button>
+                        <span class="text-sm">Siguiente: {{ count+1 }}</span>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <button @click="decrement" class="bg-red-500 text-white font-bold py-2 px-4 rounded shadow">
+                            Restar
+                        </button>
+                        <span class="text-sm">Anterior: {{ count-1 }}</span>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <input type="number" v-model="count" class="text-blue-500 font-bold py-2 px-4 rounded shadow" />
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <button @click="count = 0; operaciones = []" class="bg-gray-500 text-white font-bold py-2 px-4 rounded shadow">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-5 mt-10 mb-3 max-h-[500px] overflow-y-auto bg-gray-50 p-4 shadow rounded">
+                    <div class="flex flex-col gap-3">
+                        Selecciona una operacion
+                        <select v-model="selected" class="text-blue-500 font-bold py-2 px-4 rounded shadow" name="op" id="op">
+                            <option v-for="op in operaciones" :value="op.valor">
+                                {{ op.valor }} ({{ op.accion }})
+                            </option>
+                        </select>
+                        Has seleccionado {{ selected }}
+                    </div>
+
+                    <p class="max-w-[200px]">
+                        Lista de operariones: {{ operaciones }}
+                    </p>
+
+                    <div class="grid grid-cols-3 gap-1">
+                        <!-- Secuencia de operariones -->
+                        <p v-for="op in operaciones" class="cursor-pointer bg-gray-800 rounded-full border-4 w-12 h-12 grid place-items-center shadow text-center" :class="op.valor == selected ? 'border-blue-500' : 'border-gray-300'" :title="op.valor">
+                            <span @click="count = op.valor" class="font-bold text-xl" :class="op.accion == '+' ? 'text-green-500' : 'text-red-500'">{{ op.accion }}</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+        </main>
+
+
+
+    </div>
+    <script>
+        const { createApp, ref, watch } = Vue
+
+        createApp({
+            setup() {
+                const count = ref(0);
+                const operaciones = ref([]);
+                const selected = ref(null)
+
+                const increment = () => {
+                    count.value++;
+                }
+
+                const decrement = () => {
+                    count.value--;
+                }
+
+                // Observador
+                watch(count, async (newCount, oldCount) => {
+                    let op = {
+                        accion: '=',
+                        valor: newCount
+                    }
+
+                    op.accion = newCount > oldCount ? '+' : '-'
+                    operaciones.value.push(op)
+                })
+
+                return {
+                    count,
+                    increment,
+                    decrement,
+                    operaciones,
+                    selected
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>

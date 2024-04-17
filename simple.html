@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body>
+    <div id="app">
+
+        <main class="w-full h-96 flex justify-center">
+
+            <div class="mt-24">
+                <p class="text-xl font-semibold">Este es mi contador: {{ count }}</p>
+
+                <div class="flex gap-3 my-2 text-xl">
+                    <div class="flex flex-col gap-2">
+                        <button @click="count++" class="bg-green-500 text-white font-bold py-2 px-4 rounded shadow">
+                            Sumar
+                        </button>
+                        <span class="text-sm">Siguiente: {{ count+1 }}</span>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <button @click="decrement" class="bg-red-500 text-white font-bold py-2 px-4 rounded shadow">
+                            Restar
+                        </button>
+                        <span class="text-sm">Anterior: {{ count-1 }}</span>
+                    </div>
+
+                    <div class="flex flex-col gap-2">
+                        <button @click="count = 0" class="bg-gray-500 text-white font-bold py-2 px-4 rounded shadow">
+                            Reset
+                        </button>
+                    </div>
+                </div>
+                
+            </div>
+
+
+        </main>
+
+
+
+    </div>
+    <script>
+        const { createApp, ref } = Vue
+
+        createApp({
+            setup() {
+                const count = ref(0);
+
+                const increment = () => {
+                    count.value++;
+                }
+
+                const decrement = () => {
+                    count.value--;
+                }
+
+                return {
+                    count,
+                    increment,
+                    decrement,
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+
+</html>
